@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "//": "Cocos Creator 3.8.x 工程的 TS 编译配置。Cocos 编辑器会读 ./temp/tsconfig.cocos.json 作为基础，本文件 extends 它再覆盖项目级选项。",
+  "extends": "./temp/tsconfig.cocos.json",
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["ES2020", "DOM"],
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": false,
+    "baseUrl": ".",
+    "paths": {
+      "cc": ["./node_modules/cc"],
+      "@rtd/shared": ["../shared/dist/esm/index.js"],
+      "@rtd/shared/*": ["../shared/dist/esm/*"],
+      "@core/*":     ["assets/scripts/core/*"],
+      "@battle/*":   ["assets/scripts/battle/*"],
+      "@map/*":      ["assets/scripts/map/*"],
+      "@roguelike/*":["assets/scripts/roguelike/*"],
+      "@entity/*":   ["assets/scripts/entity/*"],
+      "@config/*":   ["assets/scripts/config/*"],
+      "@data/*":     ["assets/scripts/data/*"],
+      "@social/*":   ["assets/scripts/social/*"],
+      "@network/*":  ["assets/scripts/network/*"],
+      "@ui/*":       ["assets/scripts/ui/*"],
+      "@utils/*":    ["assets/scripts/utils/*"]
+    }
+  },
+  "include": [
+    "assets/scripts/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "library",
+    "temp",
+    "build",
+    "settings",
+    "build-tools"
+  ]
+}

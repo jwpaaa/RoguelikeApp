@@ -1,0 +1,23 @@
+{
+  "name": "rtd-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cocos Creator 3.8.x 工程（联机肉鸽塔防客户端）",
+  "scripts": {
+    "build:shared": "cd ../shared && npm run build",
+    "build:tools": "tsc -p tsconfig.tools.json",
+    "test:sim": "npm run build:shared && npm run build:tools && node build-tools/tools/sim.js",
+    "test:sim_ui": "npm run build:shared && npm run build:tools && node build-tools/tools/sim_ui.js",
+    "test:online": "npm run build:shared && npm run build:tools && node build-tools/tools/online_sim.js",
+    "test": "npm run test:sim && npm run test:sim_ui",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@rtd/shared": "file:../shared"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1",
+    "typescript": "^5.9.3",
+    "ws": "^8.20.1"
+  }
+}

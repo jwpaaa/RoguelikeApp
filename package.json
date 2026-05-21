@@ -1,0 +1,25 @@
+{
+  "name": "roguelike-td-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "联机肉鸽塔防（Cocos Creator 3.8 + TypeScript）— 工程总入口",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build:shared":       "cd shared && npm install && npm run build",
+    "build:tools":        "cd RoguelikeClient && npm install && node_modules/.bin/tsc -p tsconfig.tools.json",
+    "build":              "npm run build:shared && npm run build:tools",
+    "test:sim":           "node build-tools/tools/sim.js",
+    "test:sim_ui":        "node build-tools/tools/sim_ui.js",
+    "test:online":        "node build-tools/tools/online_sim.js",
+    "test:server":        "cd server && node test/run.js",
+    "test":               "npm run build && npm run test:sim && npm run test:sim_ui && npm run test:server",
+    "typecheck:client":   "cd RoguelikeClient && node_modules/.bin/tsc -p tsconfig.check.json",
+    "server:start":       "cd server && node src/index.js"
+  },
+  "dependencies": {
+    "@rtd/shared": "file:./shared",
+    "ws": "^8.20.1"
+  }
+}

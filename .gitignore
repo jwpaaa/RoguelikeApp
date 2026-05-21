@@ -1,0 +1,16 @@
+node_modules/
+build-tools/
+shared/dist/
+shared/node_modules/
+RoguelikeClient/node_modules/
+RoguelikeClient/library/
+RoguelikeClient/temp/
+RoguelikeClient/build/
+RoguelikeClient/settings/
+RoguelikeClient/local/
+RoguelikeClient/tsconfig.check.json
+server/node_modules/
+.DS_Store
+*.log
+.idea/
+.vscode/

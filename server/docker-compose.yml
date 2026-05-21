@@ -1,0 +1,89 @@
+# 联机肉鸽塔防 — 完整开发/测试环境
+# ---------------------------------------------------------------
+# 使用：
+#   docker-compose up -d            # 后台启动
+#   docker-compose logs -f rtd      # 看日志
+#   docker-compose down             # 停止
+#
+# 服务端口：
+#   - rtd-server:    8765 (WebSocket)
+#   - rtd-server:    9090 (Prometheus /metrics)
+#   - mongo:         27017
+#   - redis:         6379
+#   - mongo-express: 8081 (可选 Mongo UI)
+
+version: '3.8'
+
+services:
+  rtd:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    image: rtd-server:latest
+    container_name: rtd-server
+    restart: unless-stopped
+    ports:
+      - "8765:8765"
+      - "9090:9090"
+    environment:
+      PORT: "8765"
+      METRICS_PORT: "9090"
+      LOG_LEVEL: "INFO"
+      WS_IMPL: "ws"
+      JWT_SECRET: "${JWT_SECRET:-replace_me_in_prod}"
+      MONGO_URL: "mongodb://mongo:27017"
+      MONGO_DB: "rtd"
+      REDIS_URL: "redis://redis:6379"
+      WX_APP_ID: "${WX_APP_ID:-}"
+      WX_APP_SECRET: "${WX_APP_SECRET:-}"
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - rtd-net
+
+  mongo:
+    image: mongo:6
+    container_name: rtd-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - rtd-net
+    # 生产建议开启认证，开发环境免认证
+    command: ["mongod", "--bind_ip_all"]
+
+  redis:
+    image: redis:7-alpine
+    container_name: rtd-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - rtd-net
+    command: ["redis-server", "--appendonly", "yes"]
+
+  mongo-express:
+    image: mongo-express:1
+    container_name: rtd-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: "mongodb://mongo:27017"
+      ME_CONFIG_BASICAUTH_USERNAME: "admin"
+      ME_CONFIG_BASICAUTH_PASSWORD: "admin"
+    depends_on:
+      - mongo
+    networks:
+      - rtd-net
+    profiles:
+      - debug   # 默认不启动；用 --profile debug 开
+
+volumes:
+  mongo-data:
+  redis-data:
+
+networks:
+  rtd-net:
+    driver: bridge
