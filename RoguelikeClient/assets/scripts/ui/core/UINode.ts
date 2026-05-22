@@ -73,11 +73,22 @@ export class UINode {
         return node;
     }
 
+    /** 把 "RRGGBBAA" 字符串转成 Color */
+    private static _parseColor(hex: string | number): cc.Color {
+        if (typeof hex === 'number') hex = hex.toString(16).padStart(8, '0');
+        return new cc.Color(
+            parseInt(hex.substring(0, 2), 16),
+            parseInt(hex.substring(2, 4), 16),
+            parseInt(hex.substring(4, 6), 16),
+            parseInt(hex.substring(6, 8), 16),
+        );
+    }
+
     /** 纯色背景节点 */
     static panel({ name, size, pos, anchor, color }: PanelOpts): cc.Node {
         const node = UINode.empty({ name: name || 'Panel', size, pos, anchor });
         const sp = node.addComponent(cc.Sprite);
-        if (color !== undefined) sp.color = cc.Color.fromHEX(color);
+        if (color !== undefined) sp.color = UINode._parseColor(color);
         return node;
     }
 
@@ -87,7 +98,7 @@ export class UINode {
         const lbl = node.addComponent(cc.Label);
         lbl.string = text || '';
         lbl.fontSize = fontSize || FontSize.NORMAL;
-        if (color !== undefined) lbl.color = cc.Color.fromHEX(color);
+        if (color !== undefined) lbl.color = UINode._parseColor(color);
         return { node, label: lbl };
     }
 

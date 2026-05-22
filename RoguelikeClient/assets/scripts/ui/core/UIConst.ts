@@ -16,30 +16,36 @@ export const MapView = Object.freeze({
     CELL_PX_Y: 33,
 });
 
+function _hex(v: number, digits: number): string {
+    let s = v.toString(16).toUpperCase();
+    while (s.length < digits) s = '0' + s;
+    return s;
+}
+
 export const Palette = Object.freeze({
-    WHITE:        0xFFFFFFFF,
-    BLACK:        0x000000FF,
-    GOLD:         0xFFD700FF,
-    SILVER:       0xC0C0C0FF,
-    RED:          0xE74C3CFF,
-    GREEN:        0x2ECC71FF,
-    BLUE:         0x3498DBFF,
-    PURPLE:       0x9B59B6FF,
-    DARK_BG:      0x1E1E2EFF,
-    PANEL_BG:     0x2C2C3EE0,
-    BTN_NORMAL:   0x4A90E2FF,
-    BTN_PRESSED:  0x357AC9FF,
-    BTN_DISABLED: 0x95A5A6FF,
-    HP_BAR_BG:    0x444444FF,
-    HP_BAR_FG:    0xE74C3CFF,
-    XP_BAR_FG:    0x2ECC71FF,
-    SHIELD:       0x5DADE2FF,
-    DMG_NORMAL:   0xFFFFFFFF,
-    DMG_CRIT:     0xFFD700FF,
-    DMG_DOT:      0x9B59B6FF,
-    DMG_HEAL:     0x2ECC71FF,
-    DMG_IMMUNE:   0x95A5A6FF,
-    DMG_SHIELD:   0x5DADE2FF,
+    WHITE:        _hex(0xFFFFFFFF, 8),
+    BLACK:        _hex(0x000000FF, 8),
+    GOLD:         _hex(0xFFD700FF, 8),
+    SILVER:       _hex(0xC0C0C0FF, 8),
+    RED:          _hex(0xE74C3CFF, 8),
+    GREEN:        _hex(0x2ECC71FF, 8),
+    BLUE:         _hex(0x3498DBFF, 8),
+    PURPLE:       _hex(0x9B59B6FF, 8),
+    DARK_BG:      _hex(0x1E1E2EFF, 8),
+    PANEL_BG:     _hex(0x2C2C3EE0, 8),
+    BTN_NORMAL:   _hex(0x4A90E2FF, 8),
+    BTN_PRESSED:  _hex(0x357AC9FF, 8),
+    BTN_DISABLED: _hex(0x95A5A6FF, 8),
+    HP_BAR_BG:    _hex(0x444444FF, 8),
+    HP_BAR_FG:    _hex(0xE74C3CFF, 8),
+    XP_BAR_FG:    _hex(0x2ECC71FF, 8),
+    SHIELD:       _hex(0x5DADE2FF, 8),
+    DMG_NORMAL:   _hex(0xFFFFFFFF, 8),
+    DMG_CRIT:     _hex(0xFFD700FF, 8),
+    DMG_DOT:      _hex(0x9B59B6FF, 8),
+    DMG_HEAL:     _hex(0x2ECC71FF, 8),
+    DMG_IMMUNE:   _hex(0x95A5A6FF, 8),
+    DMG_SHIELD:   _hex(0x5DADE2FF, 8),
 });
 
 export const FontSize = Object.freeze({
