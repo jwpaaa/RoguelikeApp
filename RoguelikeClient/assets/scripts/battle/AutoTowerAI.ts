@@ -3,7 +3,7 @@
  */
 
 import { TileType } from '../config/MapConfig';
-import { TowerType, TowerConfig, type TowerTypeValue } from '@rtd/shared';
+import { TowerType, TowerConfig, type TowerTypeValue } from '../../shared/index';
 import { instance as EventBus } from '../core/EventBus';
 import type { BattleManager } from './BattleManager';
 

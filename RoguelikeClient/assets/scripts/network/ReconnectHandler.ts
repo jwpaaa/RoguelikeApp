@@ -4,7 +4,7 @@
 
 import { instance as EventBus } from '../core/EventBus';
 import { Logger } from '../utils/Logger';
-import { MessageType } from '@rtd/shared';
+import { MessageType } from '../../shared/index';
 import type { WebSocketClient } from './WebSocketClient';
 
 export const RECONNECT_TIMEOUT_MS = 120 * 1000;

@@ -17,7 +17,7 @@
  */
 
 import { instance as EventBus } from '../core/EventBus';
-import { MessageType, ActionType } from '@rtd/shared';
+import { MessageType, ActionType } from '../../shared/index';
 import { Logger } from '../utils/Logger';
 import type { BattleManager } from '../battle/BattleManager';
 import type { NetworkClient } from './NetworkClient';

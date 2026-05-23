@@ -1,7 +1,7 @@
 import { _decorator, Component, Label, Button, Sprite, Color } from 'cc';
 import { instance as TimeManager } from '../../scripts/core/TimeManager';
 import { instance as EventBus } from '../../scripts/core/EventBus';
-import { TowerConfig, type TowerTypeValue } from '@rtd/shared';
+import { TowerConfig, type TowerTypeValue } from '../../shared/index';
 
 const { ccclass, property } = _decorator;
 

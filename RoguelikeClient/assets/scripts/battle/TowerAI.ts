@@ -2,7 +2,7 @@
  * 塔目标选择 AI（5 种优先级模式 — F-2.2.1）
  */
 
-import { TargetMode } from '@rtd/shared';
+import { TargetMode } from '../../shared/index';
 import { distSq } from '../utils/MathUtils';
 import type { Tower } from '../entity/Tower';
 import type { Enemy } from '../entity/Enemy';

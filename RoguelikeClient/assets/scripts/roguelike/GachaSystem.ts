@@ -6,7 +6,7 @@ import {
     Rarity, RarityRate, PityRule, DUPLICATE_REFUND,
     CardPoolN, CardPoolR, CardPoolSR, CardPoolSSR,
     type GachaCard, type RarityValue,
-} from '@rtd/shared';
+} from '../../shared/index';
 import { instance as EventBus } from '../core/EventBus';
 import type { SeededRandom } from '../utils/SeededRandom';
 import type { BuffManager } from '../battle/BuffManager';

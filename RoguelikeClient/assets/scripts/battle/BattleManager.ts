@@ -10,7 +10,7 @@
 
 import { SeededRandom } from '../utils/SeededRandom';
 import { MapGenerator, type GameMap } from '../map/MapGenerator';
-import { TowerType, type TowerTypeValue } from '@rtd/shared';
+import { TowerType, type TowerTypeValue } from '../../shared/index';
 import { DifficultyConfig, MultiplayerConfig, type DifficultyValue } from '../config/DifficultyConfig';
 import { TOTAL_WAVES, isBossWave, getWaveRewardGold } from '../config/WaveConfig';
 import { ItemType } from '../config/ItemConfig';
@@ -36,7 +36,7 @@ import { Minion } from '../entity/Minion';
 import { instance as EventBus } from '../core/EventBus';
 import { Logger } from '../utils/Logger';
 import type { Tower, GlobalMod, AuraMod } from '../entity/Tower';
-import type { TargetModeValue } from '@rtd/shared';
+import type { TargetModeValue } from '../../shared/index';
 
 export const State = Object.freeze({
     PREPARE:   'PREPARE',

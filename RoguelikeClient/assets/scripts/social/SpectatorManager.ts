@@ -3,7 +3,7 @@
  */
 
 import { instance as EventBus } from '../core/EventBus';
-import { MessageType } from '@rtd/shared';
+import { MessageType } from '../../shared/index';
 import type { NetworkClient } from '../network/NetworkClient';
 
 export interface SpectatorCtx {

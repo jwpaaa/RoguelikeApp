@@ -2,7 +2,7 @@
  * 波次配置（来自需求文档 §4.2 F-2.6 / §5.2.2）
  */
 
-import { EnemyType, BossType, type EnemyTypeValue, type BossTypeValue } from '@rtd/shared';
+import { EnemyType, BossType, type EnemyTypeValue, type BossTypeValue } from '../../shared/index';
 import type { SeededRandom } from '../utils/SeededRandom';
 
 export interface WaveSlot {

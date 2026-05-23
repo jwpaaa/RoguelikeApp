@@ -6,7 +6,7 @@
  * 在内部转 FixedPoint 计算，再 round 回整数 HP。
  */
 
-import { TowerConfig, TargetMode, type TowerLevelStats, type TowerTypeValue, type TargetModeValue } from '@rtd/shared';
+import { TowerConfig, TargetMode, type TowerLevelStats, type TowerTypeValue, type TargetModeValue } from '../../shared/index';
 
 let _seq = 1;
 function nextId(): string { return `tw_${_seq++}`; }

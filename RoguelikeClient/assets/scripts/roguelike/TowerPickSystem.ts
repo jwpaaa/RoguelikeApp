@@ -2,7 +2,7 @@
  * 塔三选一（来自需求文档 §F-3.4）
  */
 
-import { TowerType, type TowerTypeValue } from '@rtd/shared';
+import { TowerType, type TowerTypeValue } from '../../shared/index';
 import type { SeededRandom } from '../utils/SeededRandom';
 import type { TowerController } from '../battle/TowerController';
 import type { EconomyManager } from '../battle/EconomyManager';

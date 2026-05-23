@@ -2,7 +2,7 @@
  * Buff/Debuff 运行时管理（来自需求文档 §F-3.5）
  */
 
-import { Duration } from '@rtd/shared';
+import { Duration } from '../../shared/index';
 
 export interface BuffCard {
     id: string;

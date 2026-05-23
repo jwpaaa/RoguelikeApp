@@ -8,7 +8,7 @@
 
 import { instance as TimeManager } from '../core/TimeManager';
 import { instance as EventBus } from '../core/EventBus';
-import { MessageType } from '@rtd/shared';
+import { MessageType } from '../../shared/index';
 
 export const MAX_PAUSE_PER_BATTLE = 3;
 export const MAX_PAUSE_DURATION_MS = 60000;

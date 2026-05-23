@@ -11,7 +11,7 @@ import {
     type ShopTierValue, type GoodsKindValue,
 } from '../config/ShopConfig';
 import { ItemConfig, ItemType, type ItemTypeValue } from '../config/ItemConfig';
-import { CardPoolSR, type GachaCard } from '@rtd/shared';
+import { CardPoolSR, type GachaCard } from '../../shared/index';
 import { instance as EventBus } from '../core/EventBus';
 import type { SeededRandom } from '../utils/SeededRandom';
 import type { EconomyManager } from './EconomyManager';

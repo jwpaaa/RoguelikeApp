@@ -3,7 +3,7 @@
  */
 
 import { Tower } from '../entity/Tower';
-import { TowerConfig, TargetMode, type TowerTypeValue, type TargetModeValue } from '@rtd/shared';
+import { TowerConfig, TargetMode, type TowerTypeValue, type TargetModeValue } from '../../shared/index';
 import { TileType, type TileTypeValue } from '../config/MapConfig';
 import { instance as EventBus } from '../core/EventBus';
 import type { EntityManager } from './EntityManager';

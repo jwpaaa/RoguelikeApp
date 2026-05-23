@@ -2,7 +2,7 @@
  * 塔属性自动成长（来自需求文档 §F-3.2）
  */
 
-import { TowerConfig } from '@rtd/shared';
+import { TowerConfig } from '../../shared/index';
 import type { EntityManager } from '../battle/EntityManager';
 
 export interface GrowthCtx {

@@ -7,7 +7,7 @@
 import {
     EnemyConfig, BossConfig, computeHp, computeBossHp, BASE,
     type EnemyTypeValue, type BossTypeValue,
-} from '@rtd/shared';
+} from '../../shared/index';
 
 let _seq = 1;
 function nextId(): string { return `e_${_seq++}`; }

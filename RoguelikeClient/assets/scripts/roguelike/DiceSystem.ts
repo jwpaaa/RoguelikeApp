@@ -2,7 +2,7 @@
  * 骰子系统（来自需求文档 §F-3.1）
  */
 
-import { getCandidatePool, PICK_COUNT, type DiceEffect } from '@rtd/shared';
+import { getCandidatePool, PICK_COUNT, type DiceEffect } from '../../shared/index';
 import { instance as EventBus } from '../core/EventBus';
 import type { SeededRandom } from '../utils/SeededRandom';
 import type { BuffManager } from '../battle/BuffManager';

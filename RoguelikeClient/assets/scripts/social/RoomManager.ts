@@ -7,7 +7,7 @@
 
 import { instance as EventBus } from '../core/EventBus';
 import { instance as User } from '../data/UserDataManager';
-import { MessageType } from '@rtd/shared';
+import { MessageType } from '../../shared/index';
 import type { NetworkClient } from '../network/NetworkClient';
 
 export const RoomState = Object.freeze({

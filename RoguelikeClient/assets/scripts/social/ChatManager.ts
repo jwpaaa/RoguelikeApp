@@ -7,7 +7,7 @@
  */
 
 import { instance as EventBus } from '../core/EventBus';
-import { MessageType } from '@rtd/shared';
+import { MessageType } from '../../shared/index';
 import { instance as User } from '../data/UserDataManager';
 import type { NetworkClient } from '../network/NetworkClient';
 

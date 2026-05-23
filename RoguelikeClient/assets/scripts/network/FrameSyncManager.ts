@@ -3,7 +3,7 @@
  */
 
 import { instance as EventBus } from '../core/EventBus';
-import { MessageType, ActionType, type PlayerAction } from '@rtd/shared';
+import { MessageType, ActionType, type PlayerAction } from '../../shared/index';
 import type { WebSocketClient } from './WebSocketClient';
 
 export const FRAME_TIMEOUT_MS = 200;

@@ -5,7 +5,7 @@
 import { WebSocketClient } from './WebSocketClient';
 import { ReconnectHandler } from './ReconnectHandler';
 import { PingMonitor } from './PingMonitor';
-import { MessageType } from '@rtd/shared';
+import { MessageType } from '../../shared/index';
 import { instance as EventBus } from '../core/EventBus';
 import { Logger } from '../utils/Logger';
 import { Storage } from '../utils/Storage';
