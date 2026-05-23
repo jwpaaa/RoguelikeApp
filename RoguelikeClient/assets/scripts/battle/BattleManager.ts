@@ -275,6 +275,14 @@ export class BattleManager {
     startBattle(): void {
         Logger.info('Battle', 'startBattle seed=', this.seed, 'diff=', this.difficulty, 'players=', this.players.length);
         EventBus.emit('battle_start', this);
+
+        // 三选一模式：监听玩家确认骰子后推进
+        EventBus.on('wave_inter_event_done', () => {
+            if (this.state === State.WAVE_END) {
+                this._advanceFromWaveEnd();
+            }
+        });
+
         this._startNextWave();
     }
 
@@ -417,36 +425,50 @@ export class BattleManager {
         const reward = Math.floor(getWaveRewardGold(wave) * (this.diff.waveRewardMul || 1));
         for (const p of this.players) this.economy.addGold(p.id, reward, 'wave_reward');
 
-        // 4) 骰子
+        // 4) 骰子（先不 emit，等抽卡确认后再 emit）
         const dices: Array<{ player: string; dice: number; picks: unknown[]; allyTargets: unknown }> = [];
         for (const p of this.players) {
             const r = this.diceSys.rollOnce(p.id);
             dices.push({ player: p.id, ...r });
         }
 
-        // 5) 抽卡（每 3 波 + BOSS 波额外）
+        // 5) 塔三选一（每3波 + 首次建塔后）
+        const towerPicks: Array<{ player: string; options: TowerTypeValue[] }> = [];
+        if (wave % 3 === 0) {
+            for (const p of this.players) {
+                const opts = this.pickSys.rollOptions(p.id);
+                if (opts.length > 0) {
+                    towerPicks.push({ player: p.id, options: opts });
+                }
+            }
+        }
+
+        // 6) 抽卡（每 3 波 + BOSS 波额外）
         const gachas: Array<{ player: string; card: unknown; refundedGold: number }> = [];
-        if (wave % 3 === 0 || isBossWave(wave)) {
+        const hasGacha = (wave % 3 === 0 || isBossWave(wave));
+        if (hasGacha) {
             for (const p of this.players) {
                 const g = this.gachaSys.draw(p.id);
                 gachas.push({ player: p.id, ...g });
             }
         }
 
-        // 6) 随机事件
+        // 7) 随机事件
         const evt = this.randomEvtSys.maybeTrigger(wave, this.players.map((p) => p.id));
 
-        // 7) 商店
+        // 8) 商店
         const playerIds = this.players.map((p) => p.id);
         const shopOpened = this.shopCtl.openIfTriggered(wave, playerIds);
 
-        // 8) 1 波 buff 到期
+        // 9) 1 波 buff 到期
         this.buffs.expireOneWave();
         this.economy.resetWaveBuffs();
 
-        EventBus.emit('wave_settle', { wave, dices, gachas, randomEvent: evt, shop: shopOpened });
+        EventBus.emit('wave_settle', { wave, dices, gachas, towerPicks, randomEvent: evt, shop: shopOpened });
 
-        if (!shopOpened) this._advanceFromWaveEnd();
+        // 事件队列交给 UI 层（BattleScene）控制先后顺序
+        // 先发 wave_settle，UI 层依次弹出：抽卡(如有) → 骰子 → 推进
+        if (!shopOpened) return;
     }
 
     private _advanceFromWaveEnd(): void {

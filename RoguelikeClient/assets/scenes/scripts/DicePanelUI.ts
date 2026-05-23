@@ -46,15 +46,9 @@ export class DicePanelUI extends Component {
         this._selectedIdx = -1;
         this._hasInit = false;
         this._timeoutSec = TIMEOUT_SEC;
-
-        // 暂停战斗
-        TimeManager.pause();
     }
 
     onDestroy(): void {
-        // 恢复战斗
-        TimeManager.resume();
-        // 如果没选，默认选第一个
         if (this._selectedIdx < 0 && this._data) {
             this._confirm(0);
         }

@@ -6,6 +6,7 @@ import { UIBase } from '../core/UIBase';
 import { UINode } from '../core/UINode';
 import { instance as UI } from '../core/UIManager';
 import { Palette, FontSize, DesignResolution } from '../core/UIConst';
+import { TOTAL_WAVES } from '../../config/WaveConfig';
 import type { BattleManager } from '../../battle/BattleManager';
 import type { cc } from '../core/CocosAdapter';
 
@@ -96,7 +97,7 @@ export class TopBar extends UIBase {
 
     private _refreshWave(): void {
         if (!this.waveLbl) return;
-        this.waveLbl.string = `波次: ${this.battle.currentWave}/20`;
+        this.waveLbl.string = `波次: ${this.battle.currentWave}/${TOTAL_WAVES}`;
     }
     private _refreshGold(): void {
         if (!this.goldLbl) return;

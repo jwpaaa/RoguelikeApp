@@ -459,6 +459,14 @@
       "__uuid__": "35b91bb5-b825-4950-b476-509d125702fe",
       "__expectedType__": "cc.Prefab"
     },
+    "shopPanelPrefab": {
+      "__uuid__": "a9ebd96e-3247-4fa9-b8b5-b3c5cef6c0ee",
+      "__expectedType__": "cc.Prefab"
+    },
+    "settlementPanelPrefab": {
+      "__uuid__": "6c32a1b2-dbaf-45b4-af94-de3ac14fa3f2",
+      "__expectedType__": "cc.Prefab"
+    },
     "_id": "e8MEkrzbJAV7iNtwQU3JQ2"
   },
   {

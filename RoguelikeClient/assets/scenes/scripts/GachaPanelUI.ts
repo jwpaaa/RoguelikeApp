@@ -42,11 +42,9 @@ export class GachaPanelUI extends Component {
         this._data = data;
         this._hasInit = false;
         this._timeoutSec = TIMEOUT_SEC;
-        TimeManager.pause();
     }
 
     onDestroy(): void {
-        TimeManager.resume();
     }
 
     private _fill(): void {

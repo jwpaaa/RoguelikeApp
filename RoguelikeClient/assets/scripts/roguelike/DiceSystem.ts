@@ -54,25 +54,21 @@ export class DiceSystem {
         const pool = getCandidatePool(dice, this.reducedPositive);
         const picks: DiceEffect[] = this.rng.pickN(pool, PICK_COUNT);
 
+        // 三选一模式：不立即 apply，等玩家选完再 apply
         const allyTargets: Record<string, string> = {};
         for (const card of picks) {
-            const t = card.effect.target;
-            if (t === 'RANDOM_ALLY') {
+            if (card.effect.target === 'RANDOM_ALLY') {
                 const allies = this.getAllies();
                 if (allies.length === 0) continue;
-                const target = this.rng.pickOne(allies)!;
-                const resist = this.getResist(target);
-                if (this.rng.next() < resist) {
-                    allyTargets[card.id] = '__resisted__';
-                    continue;
-                }
-                allyTargets[card.id] = target;
-                this.bm.applyEffect(target, card);
-            } else {
-                this.bm.applyEffect(playerId, card);
+                allyTargets[card.id] = this.rng.pickOne(allies)!;
             }
         }
         EventBus.emit('dice_rolled', { playerId, dice, picks, allyTargets });
         return { dice, picks, allyTargets };
+    }
+
+    /** 三选一确认：只 apply 选中的效果 */
+    applyPick(playerId: string, pick: DiceEffect): void {
+        this.bm.applyEffect(playerId, pick);
     }
 }

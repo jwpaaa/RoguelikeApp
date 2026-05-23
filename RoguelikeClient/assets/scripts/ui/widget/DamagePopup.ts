@@ -4,7 +4,7 @@
 
 import { UINode } from '../core/UINode';
 import { instance as UI } from '../core/UIManager';
-import { Palette, FontSize, MapView } from '../core/UIConst';
+import { Palette, FontSize, DesignResolution } from '../core/UIConst';
 import { DamagePopupManager, PopupKind, type PopupItem, type PopupKindValue } from '../../battle/DamagePopupManager';
 import { instance as EventBus } from '../../core/EventBus';
 
@@ -30,6 +30,7 @@ const FLOAT_DISTANCE = 40;
 
 export class DamagePopupRenderer {
     public mgr: DamagePopupManager;
+    private _designH: number = DesignResolution.HEIGHT;
 
     constructor() {
         this.mgr = new DamagePopupManager();
@@ -47,8 +48,23 @@ export class DamagePopupRenderer {
 
     private _spawnPopup(layer: any, item: PopupItem): void {
         const style = STYLE[item.kind] || STYLE[PopupKind.DAMAGE];
-        const screenX = MapView.LEFT + item.x * MapView.CELL_PX_X;
-        const screenY = MapView.BOTTOM + (15 - item.y) * MapView.CELL_PX_Y;
+
+        let screenX: number;
+        let screenY: number;
+
+        if (item.kind === PopupKind.GOLD) {
+            // 金币飘字固定在屏幕中上方，金币标签附近
+            screenX = 0;
+            screenY = this._designH / 2 - 60;
+        } else {
+            // 伤害/免疫等飘字跟怪物/塔坐标走
+            const cellW = 50;
+            const cellH = 33;
+            const offX = -(20 * cellW) / 2;
+            const offY = -(15 * cellH) / 2;
+            screenX = offX + item.x * cellW + cellW / 2;
+            screenY = offY + item.y * cellH + cellH / 2;
+        }
         let text = style.prefix + (item.value || '') + style.suffix;
         if (item.count > 1) text += ' ×' + item.count;
         const { node } = UINode.label({

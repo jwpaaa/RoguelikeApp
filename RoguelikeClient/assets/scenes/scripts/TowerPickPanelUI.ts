@@ -49,11 +49,9 @@ export class TowerPickPanelUI extends Component {
         this._hasInit = false;
         this._selectedIdx = -1;
         this._timeoutSec = TIMEOUT_SEC;
-        TimeManager.pause();
     }
 
     onDestroy(): void {
-        TimeManager.resume();
         if (this._selectedIdx < 0 && this._data) {
             this._confirm(0);
         }
