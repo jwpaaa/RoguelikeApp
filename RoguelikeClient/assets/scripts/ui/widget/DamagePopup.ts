@@ -9,7 +9,7 @@ import { DamagePopupManager, PopupKind, type PopupItem, type PopupKindValue } fr
 import { instance as EventBus } from '../../core/EventBus';
 
 interface PopupStyle {
-    color: number;
+    color: string | number;
     size: number;
     prefix: string;
     suffix: string;

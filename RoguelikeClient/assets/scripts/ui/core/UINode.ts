@@ -16,12 +16,12 @@ export interface BaseOpts {
     anchor?: AnchorVec;
 }
 
-export interface PanelOpts extends BaseOpts { color?: number; }
+export interface PanelOpts extends BaseOpts { color?: string | number; }
 
 export interface LabelOpts extends BaseOpts {
     text?: string;
     fontSize?: number;
-    color?: number;
+    color?: string | number;
 }
 
 export interface ButtonOpts {
@@ -29,8 +29,8 @@ export interface ButtonOpts {
     size?: SizeVec;
     pos?:  PosVec;
     anchor?: AnchorVec;
-    color?: number;
-    textColor?: number;
+    color?: string | number;
+    textColor?: string | number;
     fontSize?: number;
     onClick?: (...args: unknown[]) => void;
     disabled?: boolean;
@@ -41,8 +41,8 @@ export interface ProgressBarOpts {
     size: SizeVec;
     pos?:  PosVec;
     anchor?: AnchorVec;
-    bgColor?: number;
-    fgColor?: number;
+    bgColor?: string | number;
+    fgColor?: string | number;
     value?: number;
 }
 

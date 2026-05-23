@@ -1,7 +1,8 @@
 node_modules/
 build-tools/
 shared/dist/
-shared/node_modules/
+!shared/node_modules/
+shared/node_modules/rimraf/
 RoguelikeClient/node_modules/
 RoguelikeClient/library/
 RoguelikeClient/temp/

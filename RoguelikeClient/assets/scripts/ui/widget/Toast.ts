@@ -9,11 +9,11 @@ import { Logger } from '../../utils/Logger';
 
 export type ToastType = 'info' | 'success' | 'warning' | 'error';
 
-const TYPE_COLOR: Record<ToastType, number> = {
+const TYPE_COLOR: Record<ToastType, string | number> = {
     info:    Palette.PANEL_BG,
-    success: 0x2ECC71E0,
-    warning: 0xF39C12E0,
-    error:   0xE74C3CE0,
+    success: '2ECC71E0',
+    warning: 'F39C12E0',
+    error:   'E74C3CE0',
 };
 
 interface QueueItem { text: string; opts: { duration: number; type: ToastType }; }

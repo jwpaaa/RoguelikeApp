@@ -23,10 +23,9 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json && node -e \"require('fs').writeFileSync('dist/cjs/package.json', JSON.stringify({type:'commonjs'},null,2))\"",
     "build": "npm run build:esm && npm run build:cjs",
-    "clean": "rimraf dist"
+    "clean": "node -e \"var fs=require('fs');fs.rmSync('dist',{recursive:true,force:true})\""
   },
   "devDependencies": {
-    "typescript": "^5.4.0",
-    "rimraf": "^5.0.0"
+    "typescript": "^5.4.0"
   }
 }
