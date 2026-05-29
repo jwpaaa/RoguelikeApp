@@ -1,4 +1,4 @@
-import { _decorator, Component, Graphics, Color } from 'cc';
+import { _decorator, Component, Graphics, Color, Node } from 'cc';
 import { instance as EventBus } from '../../scripts/core/EventBus';
 import type { GameMap } from '../../scripts/map/MapGenerator';
 import type { Tower } from '../../scripts/entity/Tower';
@@ -37,10 +37,24 @@ export class MapRenderer extends Component {
     start(): void {
         this._gfx = this.node.addComponent(Graphics);
 
-        EventBus.on('tower_add', (t: Tower) => { this._towers.set(t.id, t); });
+        EventBus.on('tower_add', (t: Tower) => { this._towers.set(t.id, t); this._addTowerHitbox(t); });
         EventBus.on('tower_remove', (t: Tower) => { this._towers.delete(t.id); });
         EventBus.on('enemy_add', (e: Enemy) => { this._enemies.set(e.id, e); });
         EventBus.on('enemy_remove', (e: Enemy) => { this._enemies.delete(e.id); });
+    }
+
+    private _addTowerHitbox(tower: Tower): void {
+        const hb = new Node('Hitbox_' + tower.id);
+        hb.addComponent('cc.UITransform' as any)?.setContentSize(50, 33);
+        hb.setPosition(
+            OFF_X + tower.x * CELL_W + CELL_W / 2,
+            OFF_Y + tower.y * CELL_H + CELL_H / 2,
+            0
+        );
+        hb.on(Node.EventType.TOUCH_END, () => {
+            EventBus.emit('tower_clicked', { tower });
+        });
+        this.node.addChild(hb);
     }
 
     draw(map: GameMap): void {

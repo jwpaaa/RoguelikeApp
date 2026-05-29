@@ -50,6 +50,13 @@ export class UIManager {
     pushPopup(node: cc.Node): void {
         this.getLayer('popup').addChild(node);
         this.popupStack.push(node);
+        // 节点销毁时自动从栈中移除
+        if (node.on) {
+            const listener = node.on(cc.Node.EventType.NODE_DESTROYED || 'node-destroyed', () => {
+                const idx = this.popupStack.indexOf(node);
+                if (idx >= 0) this.popupStack.splice(idx, 1);
+            });
+        }
     }
 
     popPopup(): void {

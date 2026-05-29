@@ -173,7 +173,7 @@
     "_priority": 0,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 588.8,
+    "_orthoHeight": 487.5130434782609,
     "_near": 0,
     "_far": 2000,
     "_color": {
@@ -465,6 +465,10 @@
     },
     "settlementPanelPrefab": {
       "__uuid__": "6c32a1b2-dbaf-45b4-af94-de3ac14fa3f2",
+      "__expectedType__": "cc.Prefab"
+    },
+    "towerOpPanelPrefab": {
+      "__uuid__": "87053481-7666-4372-83b5-4e2a131332c6",
       "__expectedType__": "cc.Prefab"
     },
     "_id": "e8MEkrzbJAV7iNtwQU3JQ2"
