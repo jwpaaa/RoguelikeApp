@@ -35,9 +35,10 @@ export class Dialog extends UIBase {
         const mask = UINode.panel({
             name: 'DialogMask',
             size: { w: DesignResolution.WIDTH, h: DesignResolution.HEIGHT },
-            color: 0x00000099,
+            color: 0x00000066,
         });
         layer.addChild(mask);
+        UI.popupStack.push(mask);
 
         const panel = UINode.panel({
             name: 'Dialog',
@@ -88,6 +89,8 @@ export class Dialog extends UIBase {
     }
 
     private _resolve(value: boolean): void {
+        const idx = UI.popupStack.indexOf(this.node!);
+        if (idx >= 0) UI.popupStack.splice(idx, 1);
         if (this.resolve) {
             const r = this.resolve;
             this.resolve = null;

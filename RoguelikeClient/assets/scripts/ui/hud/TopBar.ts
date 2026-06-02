@@ -36,8 +36,8 @@ export class TopBar extends UIBase {
         const bar = UINode.panel({
             name: 'TopBar',
             size: { w: DesignResolution.WIDTH, h: 60 },
-            pos: { x: 0, y: DesignResolution.HEIGHT / 2 - 30 },
-            color: Palette.PANEL_BG,
+            pos: { x: 0, y: DesignResolution.HEIGHT / 2 - 30 - DesignResolution.SAFE_TOP },
+            color: '1A1A2ECC',
         });
         layer.addChild(bar);
         this.node = bar;
@@ -64,7 +64,7 @@ export class TopBar extends UIBase {
             text: '❤️ 5/5',
             fontSize: FontSize.LARGE,
             color: Palette.RED,
-            pos: { x: DesignResolution.WIDTH / 2 - 200, y: 0 },
+            pos: { x: DesignResolution.WIDTH / 2 - 280, y: 0 },
         });
         bar.addChild(lifeLbl.node);
         this.lifeLbl = lifeLbl.label;
@@ -72,7 +72,7 @@ export class TopBar extends UIBase {
         const pauseBtn = UINode.button({
             text: '⏸',
             size: { w: 60, h: 50 },
-            pos: { x: DesignResolution.WIDTH / 2 - 50, y: 0 },
+            pos: { x: DesignResolution.WIDTH / 2 - 120, y: 0 },
             onClick: () => this.battle.pause(this.playerId),
         });
         bar.addChild(pauseBtn.node);

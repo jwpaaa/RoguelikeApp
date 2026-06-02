@@ -5,6 +5,8 @@
 export const DesignResolution = Object.freeze({
     WIDTH: 1280,
     HEIGHT: 720,
+    SAFE_TOP: 50,   // 微信小游戏顶部胶囊按钮安全区
+    SAFE_RIGHT: 100, // 微信小游戏右上角胶囊按钮安全区
 });
 
 export const MapView = Object.freeze({
@@ -32,7 +34,7 @@ export const Palette = Object.freeze({
     BLUE:         _hex(0x3498DBFF, 8),
     PURPLE:       _hex(0x9B59B6FF, 8),
     DARK_BG:      _hex(0x1E1E2EFF, 8),
-    PANEL_BG:     _hex(0x2C2C3EE0, 8),
+    PANEL_BG:     _hex(0x2C2C3EFF, 8),
     BTN_NORMAL:   _hex(0x4A90E2FF, 8),
     BTN_PRESSED:  _hex(0x357AC9FF, 8),
     BTN_DISABLED: _hex(0x95A5A6FF, 8),

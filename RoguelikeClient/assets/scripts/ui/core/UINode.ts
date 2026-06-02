@@ -84,11 +84,17 @@ export class UINode {
         );
     }
 
-    /** 纯色背景节点 */
+    /** 纯色背景节点 — 用半透明遮罩确保所有内容可见 */
     static panel({ name, size, pos, anchor, color }: PanelOpts): cc.Node {
         const node = UINode.empty({ name: name || 'Panel', size, pos, anchor });
-        const sp = node.addComponent(cc.Sprite);
-        if (color !== undefined) sp.color = UINode._parseColor(color);
+        if (color !== undefined && size) {
+            // 用 Graphics 画纯色背景，color 的 alpha 控制透明度
+            const gfx = node.addComponent(cc.Graphics);
+            const c = UINode._parseColor(color);
+            gfx.fillColor = c;
+            gfx.rect(-size.w / 2, -size.h / 2, size.w, size.h);
+            gfx.fill();
+        }
         return node;
     }
 

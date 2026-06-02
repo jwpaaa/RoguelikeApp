@@ -41,9 +41,10 @@ export class PauseMenu extends UIBase {
         const mask = UINode.panel({
             name: 'PauseMask',
             size: { w: DesignResolution.WIDTH, h: DesignResolution.HEIGHT },
-            color: 0x000000AA,
+            color: 0x00000066,
         });
         layer.addChild(mask);
+        UI.popupStack.push(mask);
 
         const panel = UINode.panel({
             name: 'PausePanel',
@@ -99,9 +100,10 @@ export class PauseMenu extends UIBase {
         const mask = UINode.panel({
             name: 'VoteMask',
             size: { w: DesignResolution.WIDTH, h: DesignResolution.HEIGHT },
-            color: 0x000000AA,
+            color: 0x00000066,
         });
         layer.addChild(mask);
+        UI.popupStack.push(mask);
 
         const panel = UINode.panel({
             name: 'VotePanel',
@@ -152,6 +154,8 @@ export class PauseMenu extends UIBase {
 
     private _hide(): void {
         if (this.node) {
+            const idx = UI.popupStack.indexOf(this.node);
+            if (idx >= 0) UI.popupStack.splice(idx, 1);
             this.node.destroy();
             this.node = null;
         }

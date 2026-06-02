@@ -1,11 +1,11 @@
-import { _decorator, Component, Button, Label, Sprite, Color, Node, director } from 'cc';
+import { _decorator, Component, Button, Sprite, Color, Node, director, ScrollView } from 'cc';
 import { UINode } from '../../scripts/ui/core/UINode';
 import { TowerConfig, TowerType } from '../../shared/index';
 import { EnemyConfig, BossConfig, EnemyType } from '../../shared/index';
 
 const { ccclass, property } = _decorator;
 
-const CARD_W = 200, CARD_H = 160, GAP_X = 15, GAP_Y = 175;
+const CARD_W = 200, CARD_H = 160;
 const ICONS: Record<string, string> = {
     ARROW:'🏹', CANNON:'💣', ICE:'❄️', MAGIC:'🔮', TESLA:'⚡', POISON:'☠️', SUMMON:'🧙', TOTEM:'🗿',
     NORMAL:'👹', FAST:'🦅', FLYING:'🦇', TANK:'🦏', HEALER:'💚', SPLIT:'🧬', BOMBER:'💣',
@@ -44,6 +44,10 @@ export class CollectionUI extends Component {
         if (!this.contentNode) return;
         UINode.clearChildren(this.contentNode);
 
+        // 强制滚回顶部
+        const sv = this.contentNode.parent?.getComponent(ScrollView);
+        if (sv) sv.scrollToTop(0);
+
         const items: Array<{ key: string; name: string }> = [];
         if (this._tab === 'tower') {
             for (const t of Object.values(TowerType) as string[]) {
@@ -58,35 +62,36 @@ export class CollectionUI extends Component {
             }
         }
 
-        const cols = 3;
-        const startX = -(cols - 1) * (CARD_W + GAP_X) / 2;
+        const COLS = 3;
+        for (let i = 0; i < items.length; i += COLS) {
+            const row = new Node('Row_' + i);
+            row.addComponent('cc.UITransform' as any)?.setContentSize(650, CARD_H);
+            const ly = row.addComponent('cc.Layout' as any);
+            if (ly) { ly.type = 1; ly.spacingX = 15; }
 
-        items.forEach((item, idx) => {
-            const col = idx % cols;
-            const row = Math.floor(idx / cols);
-            const card = UINode.panel({
-                name: 'Card_' + item.key,
-                size: { w: CARD_W, h: CARD_H },
-                color: '2C2C3EFF',
-                pos: { x: startX + col * (CARD_W + GAP_X), y: -row * GAP_Y - 10 },
-                anchor: { x: 0.5, y: 1 },
-            });
+            for (let c = 0; c < COLS && i + c < items.length; c++) {
+                const item = items[i + c];
+                const card = UINode.panel({
+                    name: 'Card_' + item.key,
+                    size: { w: CARD_W, h: CARD_H },
+                    color: '2C2C3EFF',
+                });
 
-            const { node: icon } = UINode.label({ text: ICONS[item.key] || '❓', fontSize: 36, color: 'FFFFFFFF', pos: { x: 0, y: 30 } });
-            card.addChild(icon);
+                const { node: icon } = UINode.label({ text: ICONS[item.key] || '❓', fontSize: 36, color: 'FFFFFFFF', pos: { x: 0, y: 30 } });
+                card.addChild(icon);
+                const { node: nm } = UINode.label({ text: item.name, fontSize: 18, color: 'FFD700FF', pos: { x: 0, y: -10 } });
+                card.addChild(nm);
+                const { node: tp } = UINode.label({ text: this._tab === 'tower' ? '防御塔' : item.key.length > 6 ? 'BOSS' : '怪物', fontSize: 14, color: 'B4B4C8FF', pos: { x: 0, y: -40 } });
+                card.addChild(tp);
+                row.addChild(card);
+            }
+            this.contentNode!.addChild(row);
+        }
 
-            const { node: nm } = UINode.label({ text: item.name, fontSize: 18, color: 'FFD700FF', pos: { x: 0, y: -10 } });
-            card.addChild(nm);
-
-            const { node: tp } = UINode.label({ text: this._tab === 'tower' ? '防御塔' : item.key.length > 6 ? 'BOSS' : '怪物', fontSize: 14, color: 'B4B4C8FF', pos: { x: 0, y: -40 } });
-            card.addChild(tp);
-
-            this.contentNode!.addChild(card);
-        });
-
-        const rows = Math.ceil(items.length / cols);
-        const h = rows * GAP_Y + 30;
+        // 动态设 Content 高度 = 行数 × 行高
+        const rows = Math.ceil(items.length / COLS);
+        const h = rows * (CARD_H + 15) + 10;
         const uit = this.contentNode.getComponent('cc.UITransform' as any);
-        if (uit) uit.setContentSize(650, Math.max(h, 450));
+        if (uit) uit.height = Math.max(h, 400);
     }
 }

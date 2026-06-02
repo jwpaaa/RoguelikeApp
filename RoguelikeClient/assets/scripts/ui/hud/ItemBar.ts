@@ -43,13 +43,20 @@ export class ItemBar extends UIBase {
     private _build(): void {
         const layer = UI.getLayer('hud');
         if (!layer) return;
-        const bar = UINode.row({
-            name: 'ItemBar',
-            gap: SLOT_GAP,
+        const bar = UINode.panel({
+            name: 'ItemBarBg',
+            size: { w: DesignResolution.WIDTH, h: SLOT_SIZE + 20 },
+            color: '1A1A2ECC',
             pos: { x: 0, y: -DesignResolution.HEIGHT / 2 + SLOT_SIZE / 2 + 10 },
         });
-        layer.addChild(bar.node);
-        this.node = bar.node;
+        layer.addChild(bar);
+
+        const row = UINode.row({
+            name: 'ItemBar',
+            gap: SLOT_GAP,
+        });
+        bar.addChild(row.node);
+        this.node = row.node;
 
         const allTypes = Object.values(ItemType) as ItemTypeValue[];
         for (const itemId of allTypes) {

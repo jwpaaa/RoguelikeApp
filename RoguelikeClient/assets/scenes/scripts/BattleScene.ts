@@ -4,6 +4,7 @@ import { instance as TimeManager } from '../../scripts/core/TimeManager';
 import { instance as UIManager } from '../../scripts/ui/core/UIManager';
 import { instance as EventBus } from '../../scripts/core/EventBus';
 import { TOTAL_WAVES } from '../../scripts/config/WaveConfig';
+import { UINode } from '../../scripts/ui/core/UINode';
 import { mountBattleHUD } from '../../scripts/ui/index';
 import { MapRenderer } from './MapRenderer';
 import { AutoTowerAI } from '../../scripts/battle/AutoTowerAI';
@@ -36,6 +37,15 @@ export class BattleScene extends Component {
 
     start(): void {
         UIManager.attachRoot(this.node);
+
+        // 全屏底色，盖住所有空白区域
+        const bg = UINode.panel({
+            name: 'GlobalBg',
+            size: { w: 1500, h: 900 },
+            color: '1A1A2EFF',
+        });
+        this.node.insertChild(bg, 0); // 插入到最底层
+
         GameRoot.boot();
         this._battle = GameRoot.startBattle({ seed: Date.now() | 0, difficulty: 2, players: [{ id: 'player1', name: '测试玩家' }] });
         mountBattleHUD({ battle: this._battle, playerId: 'player1', online: false });
@@ -114,13 +124,33 @@ export class BattleScene extends Component {
             const ui = node.getComponent(SettlementPanelUI); if (ui) ui.show(r);
         });
     }
+    private _currentTowerOpNode: Node | null = null;
+
     private _bindTowerOp(): void {
         EventBus.on('tower_clicked', (data: any) => {
             if (!this.towerOpPanelPrefab || !this._battle) return;
-            // 只在战斗进行中允许点塔
             if ((this._battle as any).state !== 'FIGHTING') return;
-            const node = instantiate(this.towerOpPanelPrefab); UIManager.pushPopup(node);
-            const ui = node.getComponent(TowerOpPanelUI); if (ui) ui.show({ tower: data.tower, playerId: 'player1', battle: this._battle });
+
+            // 有非塔面板的弹窗时不响应（骰子/商店等）
+            const otherPopups = UIManager.popupStack.filter(n => n !== this._currentTowerOpNode);
+            if (otherPopups.length > 0) return;
+
+            if (this._currentTowerOpNode) {
+                this._currentTowerOpNode.destroy();
+                this._currentTowerOpNode = null;
+            }
+
+            const node = instantiate(this.towerOpPanelPrefab);
+            UIManager.pushPopup(node);
+            const ui = node.getComponent(TowerOpPanelUI);
+            if (ui) ui.show({ tower: data.tower, playerId: 'player1', battle: this._battle });
+
+            this._currentTowerOpNode = node;
+            const onDestroy = () => { if (this._currentTowerOpNode === node) this._currentTowerOpNode = null; };
+            node.once(Node.EventType.NODE_DESTROYED, onDestroy);
         });
+
+        EventBus.on('pause_enter', () => { if (this._currentTowerOpNode) { this._currentTowerOpNode.destroy(); this._currentTowerOpNode = null; } });
+        EventBus.on('wave_settle', () => { if (this._currentTowerOpNode) { this._currentTowerOpNode.destroy(); this._currentTowerOpNode = null; } });
     }
 }

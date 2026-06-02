@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Button } from 'cc';
+import { _decorator, Component, Label, Button, Node } from 'cc';
 import { instance as EventBus } from '../../scripts/core/EventBus';
 
 const { ccclass, property } = _decorator;
