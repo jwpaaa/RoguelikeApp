@@ -47,15 +47,15 @@ export class BattleScene extends Component {
         this.node.insertChild(bg, 0); // 插入到最底层
 
         GameRoot.boot();
-        this._battle = GameRoot.startBattle({ seed: Date.now() | 0, difficulty: 2, players: [{ id: 'player1', name: '测试玩家' }] });
-        mountBattleHUD({ battle: this._battle, playerId: 'player1', online: false });
-        if (this.mapLayer) { const r = this.mapLayer.getComponent(MapRenderer); if (r) r.draw((this._battle as any).map); }
-        this._ai = new AutoTowerAI({ playerId: 'player1', battle: this._battle });
         this._bindDice();
         this._bindGacha();
         this._bindShop();
         this._bindSettle();
         this._bindTowerOp();
+        this._battle = GameRoot.startBattle({ seed: Date.now() | 0, difficulty: 2, players: [{ id: 'player1', name: '测试玩家' }] });
+        mountBattleHUD({ battle: this._battle, playerId: 'player1', online: false });
+        if (this.mapLayer) { const r = this.mapLayer.getComponent(MapRenderer); if (r) r.draw((this._battle as any).map); }
+        this._ai = new AutoTowerAI({ playerId: 'player1', battle: this._battle });
 
         // 退出对局 → 返回大厅
         EventBus.on('battle_quit_request', () => {
@@ -66,10 +66,7 @@ export class BattleScene extends Component {
     update(_dt: number): void { TimeManager.update(_dt); if (this._ai) this._ai.tick(TimeManager.logicDtMs); }
 
     private _bindDice(): void {
-        EventBus.on('dice_pick_selected', (data: any) => {
-            if (this._battle) this._battle.diceSys.applyPick(data.playerId, data.selected);
-            EventBus.emit('wave_inter_event_done', { playerId: data.playerId });
-        });
+        // 在 showDicePanel 回调中统一处理 applyPick + wave_inter_event_done
     }
 
     private _bindGacha(): void {
@@ -79,7 +76,7 @@ export class BattleScene extends Component {
             if (settle.wave >= TOTAL_WAVES) { finalDone(); return; }
             const runQueue = () => {
                 TimeManager.pause();
-                const next = () => { if (settle.shop) this._showShopPanel(finalDone); else finalDone(); };
+                const next = () => { console.log('[BattleScene] next called, shop=', !!settle.shop); if (settle.shop) this._showShopPanel(finalDone); else finalDone(); };
                 if (towerPicks.length > 0) this._showTowerPickPanel(towerPicks[0], () => {
                     if (gachas.length > 0) this._showGachaPanel(gachas[0], () => { if (dices.length > 0) this._showDicePanel(dices[0], next); else next(); });
                     else if (dices.length > 0) this._showDicePanel(dices[0], next); else next();
@@ -102,13 +99,23 @@ export class BattleScene extends Component {
         if (!this.gachaPanelPrefab) { onDone(); return; }
         const node = instantiate(this.gachaPanelPrefab); UIManager.pushPopup(node);
         const ui = node.getComponent(GachaPanelUI); if (ui) ui.show(data);
-        const h = () => { EventBus.off('gacha_confirmed', h); onDone(); }; EventBus.on('gacha_confirmed', h);
+        const h = () => { EventBus.off('gacha_confirmed', h); EventBus.emit('buff_changed'); onDone(); }; EventBus.on('gacha_confirmed', h);
     }
     private _showDicePanel(data: any, onDone?: () => void): void {
         if (!this.dicePanelPrefab) { onDone?.(); return; }
         const node = instantiate(this.dicePanelPrefab); UIManager.pushPopup(node);
-        const ui = node.getComponent(DicePanelUI); if (ui) ui.show(data);
-        const h = () => { EventBus.off('dice_pick_selected', h); if (onDone) onDone(); }; EventBus.on('dice_pick_selected', h);
+        const ui = node.getComponent(DicePanelUI);
+        if (ui) ui.show({
+            playerId: data.player || 'player1',
+            dice: data.dice,
+            picks: data.picks,
+        });
+        const h = (res: any) => {
+            EventBus.off('dice_pick_selected', h);
+            if (this._battle) this._battle.diceSys.applyPick(res.playerId, res.selected);
+            EventBus.emit('buff_changed');
+            onDone?.();
+        }; EventBus.on('dice_pick_selected', h);
     }
     private _showShopPanel(onDone: () => void): void {
         if (!this.shopPanelPrefab) { onDone(); return; }

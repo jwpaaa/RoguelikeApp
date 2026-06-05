@@ -69,6 +69,8 @@ export class DiceSystem {
 
     /** 三选一确认：只 apply 选中的效果 */
     applyPick(playerId: string, pick: DiceEffect): void {
-        this.bm.applyEffect(playerId, pick);
+        console.log('[Dice] applyPick', playerId, pick.name, pick.id, 'duration=', pick.duration);
+        const r = this.bm.applyEffect(playerId, pick);
+        console.log('[Dice] applyEffect result=', r);
     }
 }

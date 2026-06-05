@@ -21,6 +21,7 @@ export class TopBar extends UIBase {
     public waveLbl: cc.Label | null = null;
     public goldLbl: cc.Label | null = null;
     public lifeLbl: cc.Label | null = null;
+    public shieldLbl: cc.Label | null = null;
 
     constructor(ctx: TopBarCtx) {
         super({});
@@ -60,6 +61,16 @@ export class TopBar extends UIBase {
         bar.addChild(goldLbl.node);
         this.goldLbl = goldLbl.label;
 
+        // 护盾（生命左边）
+        const shieldLbl = UINode.label({
+            text: '',
+            fontSize: FontSize.LARGE,
+            color: Palette.SHIELD,
+            pos: { x: DesignResolution.WIDTH / 2 - 420, y: 0 },
+        });
+        bar.addChild(shieldLbl.node);
+        this.shieldLbl = shieldLbl.label;
+
         const lifeLbl = UINode.label({
             text: '❤️ 5/5',
             fontSize: FontSize.LARGE,
@@ -85,6 +96,7 @@ export class TopBar extends UIBase {
             if (payload && payload.playerId === this.playerId) this._refreshGold();
         });
         this.listen('crystal_damaged', () => this._refreshLife());
+        this.listen('shield_changed', () => this._refreshLife());
         this.listen('wave_start', () => this._refreshWave());
         this.listen('wave_end',   () => this._refreshWave());
     }
@@ -106,7 +118,9 @@ export class TopBar extends UIBase {
     private _refreshLife(): void {
         if (!this.lifeLbl) return;
         const c = this.battle.crystal;
-        const shieldStr = c.shield > 0 ? ` (+${c.shield}🛡)` : '';
-        this.lifeLbl.string = `❤️ ${c.hp}/${c.maxHp}${shieldStr}`;
+        this.lifeLbl.string = `❤️ ${c.hp}/${c.maxHp}`;
+        if (this.shieldLbl) {
+            this.shieldLbl.string = c.shield > 0 ? `🛡 ${c.shield}` : '';
+        }
     }
 }

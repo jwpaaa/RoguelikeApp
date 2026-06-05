@@ -19,6 +19,7 @@ export interface BuffCard {
 export interface PlayerBuff {
     id: string;
     name?: string;
+    desc?: string;
     kind: string;
     value: number | { [key: string]: number };
     duration: string;
@@ -74,6 +75,7 @@ export class BuffManager {
         list.push({
             id: effectCard.id,
             name: effectCard.name,
+            desc: (effectCard as any).desc || '',
             kind: effect.kind,
             value: effect.value,
             duration,

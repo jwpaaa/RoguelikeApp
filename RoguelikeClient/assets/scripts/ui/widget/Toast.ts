@@ -39,7 +39,7 @@ export class Toast {
 
         const bg = UINode.panel({
             name: 'Toast',
-            size: { w: 480, h: 60 },
+            size: { w: 320, h: 160 },
             pos: { x: 0, y: DesignResolution.HEIGHT / 2 - 80 },
             color: TYPE_COLOR[opts.type] || TYPE_COLOR.info,
         });
@@ -47,7 +47,7 @@ export class Toast {
             text,
             fontSize: FontSize.NORMAL,
             color: Palette.WHITE,
-            size: { w: 460, h: 60 },
+            size: { w: 300, h: 160 },
         });
         bg.addChild(lblNode);
         layer.addChild(bg);
@@ -61,5 +61,8 @@ export class Toast {
     static info(text: string):    void { Toast.show(text, { type: 'info' }); }
     static success(text: string): void { Toast.show(text, { type: 'success' }); }
     static warn(text: string):    void { Toast.show(text, { type: 'warning' }); }
-    static error(text: string):   void { Toast.show(text, { type: 'error' }); }
+    static close(): void {
+        _queue.length = 0;
+        _showing = false;
+    }
 }
