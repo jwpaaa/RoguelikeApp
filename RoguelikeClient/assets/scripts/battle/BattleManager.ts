@@ -165,6 +165,7 @@ export class BattleManager {
 
         const crystalHp = this.diff.crystalHp + (this.talents.crystalHp || 0);
         this.crystal = new Crystal(crystalHp);
+        this.buffs.crystal = this.crystal;
         this.em.setCrystal(this.crystal);
 
         for (const p of this.players) {
@@ -254,10 +255,18 @@ export class BattleManager {
             net: cfg.net || null,
         });
         this.popups = new DamagePopupManager();
+        this.popups.economy = this.economy;
 
-        // 初始道具
+        // 初始道具（测试用）
         for (const p of this.players) {
-            this.itemCtl.initPlayer(p.id);
+            this.itemCtl.initPlayer(p.id, {
+                FREEZE_BOMB: 3,
+                FULL_LIGHTNING: 3,
+                GOLD_RUSH: 3,
+                TEMP_SLOT: 2,
+                SHIELD_GEN: 3,
+                SLOW_TIME: 3,
+            });
             this.itemCtl.add(p.id, ItemType.FREEZE_BOMB, 1);
             this.itemCtl.add(p.id, ItemType.GOLD_RUSH, 1);
         }

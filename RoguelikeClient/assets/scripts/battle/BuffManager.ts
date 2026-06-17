@@ -3,6 +3,7 @@
  */
 
 import { Duration } from '../../shared/index';
+import { instance as EventBus } from '../core/EventBus';
 
 export interface BuffCard {
     id: string;
@@ -53,6 +54,7 @@ export interface EnemyWaveMod {
 export class BuffManager {
     public playerBuffs: Map<string, PlayerBuff[]> = new Map();
     public nextWaveEnemyBuffs: BuffCard[] = [];
+    public crystal: any = null; // 由 BattleManager 注入
 
     initPlayer(playerId: string): void {
         if (!this.playerBuffs.has(playerId)) this.playerBuffs.set(playerId, []);
@@ -65,7 +67,25 @@ export class BuffManager {
         if (!effect) return { applied: false };
 
         if (duration === Duration.INSTANT) {
+            // 即时效果：直接执行，不存 buff 列表
+            if (effect.target === 'CRYSTAL' && effect.kind === 'HEAL') {
+                if (this.crystal) {
+                    this.crystal.heal(typeof effect.value === 'number' ? effect.value : 1);
+                    EventBus.emit('shield_changed', { shield: this.crystal.shield });
+                }
+            } else if (effect.target === 'ECONOMY' && effect.kind === 'GOLD_ADD') {
+                EventBus.emit('economy_change', { playerId, goldDelta: effect.value });
+            } else if (effect.target === 'RANDOM_ALLY' && effect.kind === 'GOLD_ADD') {
+                // 随机队友的金币扣减，也走 economy_change
+                EventBus.emit('economy_change', { playerId, goldDelta: effect.value });
+            }
             return { applied: true, instant: true };
+        }
+        // 水晶护盾即时生效
+        if (effect.target === 'CRYSTAL') {
+            this.crystal.addShield(typeof effect.value === 'number' ? effect.value : 1);
+            EventBus.emit('shield_changed', { shield: this.crystal.shield });
+            return { applied: true };
         }
         if (effect.target === 'NEXT_WAVE_ENEMIES') {
             this.nextWaveEnemyBuffs.push({ ...effectCard });

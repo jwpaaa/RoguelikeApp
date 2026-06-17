@@ -35,7 +35,7 @@ export const ItemConfig: Record<ItemTypeValue, ItemDef> = {
     [ItemType.FULL_LIGHTNING]: {
         id: ItemType.FULL_LIGHTNING, name: '全屏闪电', icon: '⚡', scope: 'PLAYER',
         cooldownMs: 5000, maxStack: 3, price: 200,
-        desc: '对所有怪造成"塔攻击力总和×0.5"伤害（仅使用者塔）',
+        desc: '全屏怪物受到一次闪电伤害',
         effect: { kind: 'PLAYER_LIGHTNING', factor: 0.5 },
     },
     [ItemType.GOLD_RUSH]: {

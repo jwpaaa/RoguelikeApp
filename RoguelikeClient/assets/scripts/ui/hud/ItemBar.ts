@@ -3,6 +3,7 @@
  */
 
 import { UIBase } from '../core/UIBase';
+import { Node } from 'cc';
 import { UINode } from '../core/UINode';
 import { instance as UI } from '../core/UIManager';
 import { Palette, FontSize, DesignResolution } from '../core/UIConst';
@@ -95,9 +96,16 @@ export class ItemBar extends UIBase {
         });
         node.addChild(cdNode);
 
-        node.on('click', () => {
+        const btn = node.addComponent('cc.Button' as any);
+        if (btn) btn.transition = (cc as any).Button?.Transition?.NONE || 0;
+        node.on(Node.EventType.TOUCH_END, () => {
             const r = this.battle.useItem(this.playerId, itemId);
-            if (!r || !r.ok) Toast.warn(r && r.reason || '使用失败');
+            if (!r || !r.ok) {
+                const msg = r?.reason === 'cooldown' ? '正在冷却，请稍等' : (r?.reason || '使用失败');
+                Toast.warn(msg);
+            } else {
+                Toast.show(`${cfg.name}: ${cfg.desc}`, { duration: 2500 });
+            }
         });
         return { itemId, node, cntLbl, cdLbl };
     }

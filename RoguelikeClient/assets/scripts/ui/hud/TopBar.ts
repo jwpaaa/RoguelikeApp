@@ -97,6 +97,7 @@ export class TopBar extends UIBase {
         });
         this.listen('crystal_damaged', () => this._refreshLife());
         this.listen('shield_changed', () => this._refreshLife());
+        this.listen('buff_changed', () => { this._refreshLife(); this._refreshGold(); });
         this.listen('wave_start', () => this._refreshWave());
         this.listen('wave_end',   () => this._refreshWave());
     }

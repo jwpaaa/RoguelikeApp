@@ -76,7 +76,7 @@ export class BattleScene extends Component {
             if (settle.wave >= TOTAL_WAVES) { finalDone(); return; }
             const runQueue = () => {
                 TimeManager.pause();
-                const next = () => { console.log('[BattleScene] next called, shop=', !!settle.shop); if (settle.shop) this._showShopPanel(finalDone); else finalDone(); };
+                const next = () => { if (settle.shop) this._showShopPanel(finalDone); else finalDone(); };
                 if (towerPicks.length > 0) this._showTowerPickPanel(towerPicks[0], () => {
                     if (gachas.length > 0) this._showGachaPanel(gachas[0], () => { if (dices.length > 0) this._showDicePanel(dices[0], next); else next(); });
                     else if (dices.length > 0) this._showDicePanel(dices[0], next); else next();

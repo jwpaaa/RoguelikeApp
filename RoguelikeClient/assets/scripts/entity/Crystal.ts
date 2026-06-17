@@ -1,9 +1,4 @@
-/**
- * 水晶/萝卜（共享生命）
- * ---------------------------------------------------------------
- * 联机时全队共享同一个水晶；单机直接使用难度配置中的初始 HP。
- * 护盾抵消优先于生命扣减。
- */
+import { instance as EventBus } from '../core/EventBus';
 
 export interface CrystalDamageResult {
     actual: number;
@@ -30,14 +25,17 @@ export class Crystal {
             remaining -= absorbed;
         }
         this.hp = Math.max(0, this.hp - remaining);
+        EventBus.emit('shield_changed', { shield: this.shield, hp: this.hp });
         return { actual: dmg, dead: this.hp <= 0 };
     }
 
     heal(amount: number): void {
         this.hp = Math.min(this.maxHp, this.hp + amount);
+        EventBus.emit('shield_changed', { shield: this.shield, hp: this.hp });
     }
 
     addShield(layers: number): void {
         this.shield += layers;
+        EventBus.emit('shield_changed', { shield: this.shield, hp: this.hp });
     }
 }

@@ -5,6 +5,7 @@
  */
 
 import { instance as EventBus } from '../core/EventBus';
+import type { EconomyManager } from './EconomyManager';
 
 export const PopupKind = Object.freeze({
     DAMAGE: 'damage',
@@ -28,11 +29,15 @@ export interface PopupItem {
 
 export class DamagePopupManager {
     private _frameBuffer: Map<string, PopupItem> = new Map();
+    public economy: EconomyManager | null = null;
 
     constructor() {
         EventBus.on('bullet_fired', (data: { tower: any; target: any; raw: number; crit: boolean }) => this._onBullet(data));
         EventBus.on('crystal_damaged', (data: { dmg: number }) => this._push(PopupKind.SHIELD, 0, 0, data.dmg));
-        EventBus.on('enemy_killed', (e: any) => this._push(PopupKind.GOLD, e.x, e.y, e.reward));
+        EventBus.on('enemy_killed', (e: any) => {
+            const mul = this.economy?.gainMul?.get(e.lastHitBy) || 1;
+            this._push(PopupKind.GOLD, e.x, e.y, Math.round(e.reward * mul));
+        });
     }
 
     private _onBullet({ target, raw, crit }: { target: any; raw: number; crit: boolean }): void {

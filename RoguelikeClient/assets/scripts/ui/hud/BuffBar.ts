@@ -75,7 +75,7 @@ export class BuffBar extends UIBase {
             const dur = durMap[buff.duration] || buff.duration;
             const text = desc ? `${name}\n${desc}\n持续: ${dur}` : `${name}\n持续: ${dur}`;
             Toast.close();
-            Toast.show(text, { duration: 3000 });
+            Toast.show(text, { duration: 3000, sizeW: 400, sizeH: 120 });
         });
         this.node!.addChild(node);
     }
